@@ -1,0 +1,36 @@
+spring:
+  datasource:
+    url: jdbc:h2:file:./data/testdb;MODE=PostgreSQL;
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  sql:
+    init:
+      mode: always   # schema.sql, data.sql 자동 실행
+
+  batch:
+    jdbc:
+      initialize-schema: always  # Spring Batch 메타 테이블 자동 생성
+    job:
+      enabled: false
+
+
+#decorator:
+#  datasource:
+#    p6spy:
+#      enabled: true
+#      multiline: true
+logging:
+  level:
+    com.example.springbatchtest.batch.job: DEBUG
+#    net.ttddyy.dsproxy: DEBUG
+#    com.github.gavlyukovskiy.boot.jdbc.decorator: DEBUG
+    org.springframework.jdbc.core: DEBUG
+    org.springframework.jdbc.core.JdbcTemplate: DEBUG
+    org.springframework.jdbc.core.namedparam: DEBUG
+    org.springframework.jdbc.core.StatementCreatorUtils: TRACE
+    org.springframework.batch.item.database: DEBUG
