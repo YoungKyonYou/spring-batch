@@ -25,11 +25,13 @@ repositories {
 }
 
 dependencies {
-//	implementation "com.github.gavlyukovskiy:datasource-proxy-spring-boot-starter:1.8.1"
-//	implementation "com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.8.1"
+	implementation "com.github.gavlyukovskiy:datasource-proxy-spring-boot-starter:1.8.1"
+	implementation "com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.8.1"
 	implementation 'org.springframework.boot:spring-boot-starter-batch'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation("org.springframework.boot:spring-boot-starter-jdbc")
+    implementation 'org.springdoc:springdoc-openapi-ui:1.6.14'   // Swagger UI
+    implementation "org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.2"
 	runtimeOnly 'org.postgresql:postgresql'
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'

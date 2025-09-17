@@ -1,3 +1,7 @@
+drop table if exists monthly_tx_agg cascade;
+drop table if exists daily_tx_agg cascade;
+drop table if exists tx cascade;
+
 -- 거래 원천 테이블
 create table if not exists tx (
   id        bigserial primary key,

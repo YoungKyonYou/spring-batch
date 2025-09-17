@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.springbatchtest.mapper.TxAggMapper">
+
+    <!-- [Step1] 일 집계 페이징 조회 -->
+    <select id="selectDayAggPage" resultType="com.example.springbatchtest.dto.DayAgg">
+        SELECT
+        CAST(tx_date AS DATE) AS txDate,
+        SUM(amount)           AS totalAmount,
+        COUNT(*)              AS txCount
+        FROM tx
+        <where>
+            <if test="from != null">
+                tx_date &gt;= CAST(#{from} AS DATE)
+            </if>
+            <if test="to != null">
+                <if test="from != null"> AND </if>
+                tx_date &lt; DATEADD('DAY', 1, CAST(#{to} AS DATE))
+            </if>
+        </where>
+        GROUP BY CAST(tx_date AS DATE)
+        ORDER BY txDate ASC
+        LIMIT #{_pagesize}
+        OFFSET #{_skiprows}
+    </select>
+
+    <!-- [Step1] 일 집계 UPSERT -->
+    <update id="upsertDailyAgg" parameterType="com.example.springbatchtest.dto.DayAgg">
+        MERGE INTO daily_tx_agg (tx_date, total_amount, tx_count)
+        KEY (tx_date)
+        VALUES (#{txDate}, #{totalAmount}, #{txCount})
+    </update>
+
+    <!-- [Step2] 월 집계 페이징 조회 -->
+    <select id="selectMonthAggPage" resultType="com.example.springbatchtest.dto.MonthAgg">
+        SELECT
+        DATEADD('DAY', 1 - DAYOFMONTH(tx_date), tx_date) AS ymDate,
+        SUM(total_amount)                                AS totalAmount,
+        SUM(tx_count)                                    AS txCount
+        FROM daily_tx_agg
+        <where>
+            <if test="from != null">
+                tx_date &gt;= CAST(#{from} AS DATE)
+            </if>
+            <if test="to != null">
+                <if test="from != null"> AND </if>
+                tx_date &lt; DATEADD('DAY', 1, CAST(#{to} AS DATE))
+            </if>
+        </where>
+        GROUP BY DATEADD('DAY', 1 - DAYOFMONTH(tx_date), tx_date)
+        ORDER BY ymDate ASC
+        LIMIT #{_pagesize}
+        OFFSET #{_skiprows}
+    </select>
+
+    <!-- [Step2] 월 집계 UPSERT -->
+    <update id="upsertMonthlyAgg" parameterType="com.example.springbatchtest.dto.MonthAgg">
+        MERGE INTO monthly_tx_agg (ym_date, total_amount, tx_count)
+        KEY (ym_date)
+        VALUES (#{ymDate}, #{totalAmount}, #{txCount})
+    </update>
+
+</mapper>
