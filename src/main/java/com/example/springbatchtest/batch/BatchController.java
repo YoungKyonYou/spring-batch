@@ -15,6 +15,7 @@ public class BatchController {
     private final JobLauncher jobLauncher;
 
     private final Job txDailyMonthlyJob;
+    private final Job txDailyMonthlyJob2;
 
     @PostMapping("/run-batch")
     public String runBatch() throws Exception {
@@ -27,4 +28,18 @@ public class BatchController {
         jobLauncher.run(txDailyMonthlyJob, jobParameters);
         return "Batch job started";
     }
+
+    @PostMapping("/run-batch2")
+    public String runBatch2() throws Exception {
+        JobParameters jobParameters = new JobParametersBuilder()
+                .addString("from", "2025-08-01")
+                .addString("to", "2025-09-30")
+                .addLong("timestamp", System.currentTimeMillis())
+                .toJobParameters();
+
+        jobLauncher.run(txDailyMonthlyJob2, jobParameters);
+        return "Batch job started";
+    }
+
+
 }

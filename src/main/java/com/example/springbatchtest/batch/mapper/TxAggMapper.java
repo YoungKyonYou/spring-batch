@@ -1,8 +1,15 @@
 package com.example.springbatchtest.batch.mapper;
 
+import com.example.springbatchtest.dto.DayAgg;
+import com.example.springbatchtest.dto.MonthAgg;
 import org.apache.ibatis.annotations.Mapper;
+import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
+
+import java.time.LocalDate;
 
 @Mapper
 public interface TxAggMapper {
-    // statementId만 쓰므로 메서드가 꼭 필요하진 않지만, 관례상 둬도 됩니다.
+    MonthAgg selectMonthAggPage(int from, int to, int _pagesize, int _skiprows);
 }

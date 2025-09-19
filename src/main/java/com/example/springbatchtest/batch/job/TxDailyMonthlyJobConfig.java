@@ -15,6 +15,7 @@ import org.springframework.batch.core.configuration.annotation.EnableBatchProces
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepScope;
+import org.springframework.batch.core.job.builder.FlowBuilder;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,7 +27,6 @@ import java.util.Map;
 
 @Slf4j
 @Configuration
-@EnableBatchProcessing
 @MapperScan(basePackages = "com.example.springbatchtest.mapper")
 public class TxDailyMonthlyJobConfig {
 
@@ -80,7 +80,7 @@ public class TxDailyMonthlyJobConfig {
                 .statementId("com.example.springbatchtest.mapper.TxAggMapper.upsertDailyAgg")
                 .build();
     }
-
+    // Step1 일집계 step에 대한 Configuration 작업
     @Bean
     public Step dailyAggregateStep(MyBatisPagingItemReader<DayAgg> dayAggReader,
                                    ItemProcessor<DayAgg, DayAgg> dayAggProcessor,
@@ -123,6 +123,7 @@ public class TxDailyMonthlyJobConfig {
                 .build();
     }
 
+    // Step 2 월집계 step Configuration 작업
     @Bean
     public Step monthlyAggregateStep(MyBatisPagingItemReader<MonthAgg> monthAggReader,
                                      MyBatisBatchItemWriter<MonthAgg> monthAggWriter) {
@@ -138,6 +139,7 @@ public class TxDailyMonthlyJobConfig {
 
     @Bean
     public Job txDailyMonthlyJob(Step dailyAggregateStep, Step monthlyAggregateStep) {
+
         return jobs.get("txDailyMonthlyJob")
                 .incrementer(new RunIdIncrementer())
                 .start(dailyAggregateStep)
