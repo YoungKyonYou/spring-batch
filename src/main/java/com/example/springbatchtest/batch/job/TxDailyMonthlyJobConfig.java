@@ -2,6 +2,8 @@ package com.example.springbatchtest.batch.job;
 
 import com.example.springbatchtest.dto.DayAgg;
 import com.example.springbatchtest.dto.MonthAgg;
+import java.util.HashMap;
+import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.annotation.MapperScan;
@@ -21,13 +23,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.HashMap;
-import java.util.Map;
-
 @Slf4j
 @Configuration
 @EnableBatchProcessing
-@MapperScan(basePackages = "com.example.springbatchtest.mapper")
+@MapperScan(basePackages = "com.example.springbatchtest.batch.mapper")
 public class TxDailyMonthlyJobConfig {
 
     private final JobBuilderFactory jobs;
@@ -51,7 +50,7 @@ public class TxDailyMonthlyJobConfig {
 
         return new MyBatisPagingItemReaderBuilder<DayAgg>()
                 .sqlSessionFactory(sqlSessionFactory)
-                .queryId("com.example.springbatchtest.mapper.TxAggMapper.selectDayAggPage")
+                .queryId("com.example.springbatchtest.batch.mapper.TxAggMapper.selectDayAggPage")
                 .parameterValues(params)
                 .pageSize(100)
                 .build();
@@ -77,7 +76,7 @@ public class TxDailyMonthlyJobConfig {
     public MyBatisBatchItemWriter<DayAgg> dayAggWriter(SqlSessionFactory sqlSessionFactory) {
         return new MyBatisBatchItemWriterBuilder<DayAgg>()
                 .sqlSessionFactory(sqlSessionFactory)
-                .statementId("com.example.springbatchtest.mapper.TxAggMapper.upsertDailyAgg")
+                .statementId("com.example.springbatchtest.batch.mapper.TxAggMapper.upsertDailyAgg")
                 .build();
     }
 
@@ -109,7 +108,7 @@ public class TxDailyMonthlyJobConfig {
 
         return new MyBatisPagingItemReaderBuilder<MonthAgg>()
                 .sqlSessionFactory(sqlSessionFactory)
-                .queryId("com.example.springbatchtest.mapper.TxAggMapper.selectMonthAggPage")
+                .queryId("com.example.springbatchtest.batch.mapper.TxAggMapper.selectMonthAggPage")
                 .parameterValues(params)
                 .pageSize(100)
                 .build();
@@ -119,7 +118,7 @@ public class TxDailyMonthlyJobConfig {
     public MyBatisBatchItemWriter<MonthAgg> monthAggWriter(SqlSessionFactory sqlSessionFactory) {
         return new MyBatisBatchItemWriterBuilder<MonthAgg>()
                 .sqlSessionFactory(sqlSessionFactory)
-                .statementId("com.example.springbatchtest.mapper.TxAggMapper.upsertMonthlyAgg")
+                .statementId("com.example.springbatchtest.batch.mapper.TxAggMapper.upsertMonthlyAgg")
                 .build();
     }
 

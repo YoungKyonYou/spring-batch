@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.example.springbatchtest.mapper.TxAggMapper">
+<mapper namespace="com.example.springbatchtest.batch.mapper.TxAggMapper">
 
     <!-- [Step1] 일 집계 페이징 조회 -->
     <select id="selectDayAggPage" resultType="com.example.springbatchtest.dto.DayAgg">
@@ -62,5 +62,50 @@
         KEY (ym_date)
         VALUES (#{ymDate}, #{totalAmount}, #{txCount})
     </update>
+
+    <select id="selectByUserIds" resultType="com.example.springbatchtest.dto.UserDim">
+        SELECT user_id AS userId, user_pk AS userPk
+        FROM user_dim
+        <where>
+            <if test="userIds != null and userIds.size() > 0">
+                user_id IN
+                <foreach item="id" collection="userIds" open="(" separator="," close=")">
+                    #{id}
+                </foreach>
+            </if>
+        </where>
+    </select>
+
+    <insert id="insertUserIgnore" parameterType="com.example.springbatchtest.dto.UserDim">
+        MERGE INTO user_dim (user_id)
+            KEY(user_id)
+            VALUES (#{userId})
+
+    </insert>
+    <select id="selectByProductCodes" resultType="com.example.springbatchtest.dto.ProductDim">
+        SELECT product_code AS productCode, product_pk AS productPk
+        FROM product_dim
+        <where>
+            <if test="codes != null and codes.size() > 0">
+                product_code IN
+                <foreach item="code" collection="codes" open="(" separator="," close=")">
+                    #{code}
+                </foreach>
+            </if>
+        </where>
+    </select>
+
+    <insert id="insertProductIgnore" parameterType="com.example.springbatchtest.dto.ProductDim">
+        MERGE INTO product_dim (product_code)
+            KEY(product_code)
+            VALUES (#{productCode})
+    </insert>
+
+    <insert id="upsert" parameterType="com.example.springbatchtest.dto.UserTx">
+        MERGE INTO user_tx (tx_id, user_id, product_code, amount, tx_date)
+            KEY(tx_id)
+            VALUES (#{txId}, #{userId}, #{productCode}, #{amount}, #{txDate})
+    </insert>
+
 
 </mapper>
