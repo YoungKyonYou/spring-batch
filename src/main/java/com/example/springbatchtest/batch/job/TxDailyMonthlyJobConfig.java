@@ -38,7 +38,7 @@ public class TxDailyMonthlyJobConfig {
     }
 
     @Bean
-    @StepScope
+    @StepScope //파라미터 초기화를 위해서 필요
     public MyBatisPagingItemReader<DayAgg> dayAggReader(
             SqlSessionFactory sqlSessionFactory,
             @Value("#{jobParameters['from']}") String from,
@@ -96,7 +96,7 @@ public class TxDailyMonthlyJobConfig {
     }
 
     @Bean
-    @StepScope
+    @StepScope //파라미터 초기화를 위해서 필요
     public MyBatisPagingItemReader<MonthAgg> monthAggReader(
             SqlSessionFactory sqlSessionFactory,
             @Value("#{jobParameters['from']}") String from,

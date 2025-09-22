@@ -17,6 +17,7 @@ public class BatchController {
 
     private final Job txDailyMonthlyJob;
     private final Job fileToDbJob;
+    private final Job dbToFileJob;
 
 
     @PostMapping("/run-batch")
@@ -40,5 +41,15 @@ public class BatchController {
 
         jobLauncher.run(fileToDbJob, jobParameters);
         return "File to DB Batch job started with file: " + inputFile;
+    }
+    @PostMapping("/run-db-to-file")
+    public String runDbToFileBatch(@RequestParam(defaultValue = "data/export.txt") String outputFile) throws Exception {
+        JobParameters jobParameters = new JobParametersBuilder()
+                .addString("outputFile", outputFile)
+                .addLong("timestamp", System.currentTimeMillis())
+                .toJobParameters();
+
+        jobLauncher.run(dbToFileJob, jobParameters);
+        return "DB to File Batch job started, export file: " + outputFile;
     }
 }

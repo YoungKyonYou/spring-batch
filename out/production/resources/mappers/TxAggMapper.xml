@@ -107,5 +107,17 @@
             VALUES (#{txId}, #{userId}, #{productCode}, #{amount}, #{txDate})
     </insert>
 
+    <select id="selectUserTxPage" resultType="com.example.springbatchtest.dto.UserTx">
+        SELECT tx_id AS txId,
+               user_id AS userId,
+               product_code AS productCode,
+               amount,
+               tx_date AS txDate
+        FROM user_tx
+        ORDER BY tx_id
+            LIMIT #{_pagesize}
+        OFFSET #{_skiprows}
+    </select>
+
 
 </mapper>
