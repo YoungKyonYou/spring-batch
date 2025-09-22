@@ -11,7 +11,6 @@ public class MyBatisBatchConfig {
 
     @Bean
     public SqlSessionTemplate batchSqlSessionTemplate(SqlSessionFactory sqlSessionFactory) {
-        // ★ 배치 실행용
         return new SqlSessionTemplate(sqlSessionFactory, ExecutorType.BATCH);
     }
 }

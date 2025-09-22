@@ -1,4 +1,4 @@
-package com.example.springbatchtest.batch.job;
+package com.example.springbatchtest.batch.file.example;
 
 import com.example.springbatchtest.dto.DayAgg;
 import com.example.springbatchtest.dto.MonthAgg;
