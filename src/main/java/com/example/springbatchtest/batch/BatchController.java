@@ -16,6 +16,7 @@ public class BatchController {
 
     private final Job txDailyMonthlyJob;
 
+
     @PostMapping("/run-batch")
     public String runBatch() throws Exception {
         JobParameters jobParameters = new JobParametersBuilder()
