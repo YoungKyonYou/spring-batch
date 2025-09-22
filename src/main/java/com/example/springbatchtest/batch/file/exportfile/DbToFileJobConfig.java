@@ -1,4 +1,4 @@
-package com.example.springbatchtest.batch.file.export;
+package com.example.springbatchtest.batch.file.exportfile;
 
 
 import com.example.springbatchtest.dto.UserTx;

@@ -1,4 +1,4 @@
-package com.example.springbatchtest.batch.file;
+package com.example.springbatchtest.batch.file.importfile;
 
 
 import com.example.springbatchtest.batch.mapper.TxAggMapper;
